@@ -1,0 +1,57 @@
+{
+	"variables": {
+		"ami_id": "ami-9abea4fb",
+		"supervisor_version": "3.0b2-1",
+		"auth_header": "{{env `AUTH_HEADER`}}"
+	},
+	"builders": [
+		{
+			"type": "amazon-ebs",
+			"region": "us-west-2",
+			"source_ami": "{{user `ami_id`}}",
+			"instance_type": "t2.micro",
+			"ssh_username": "ubuntu",
+			"ami_name": "MiddleTier-{{isotime | clean_ami_name}}",
+			"ami_description": "Amazing AMI Designed by Fantastic Architect",
+			"tags": {
+				"role": "MiddleTier"
+			},
+			"run_tags": {
+				"role": "buildSystem"
+			}
+		}
+	],
+	"provisioners": [
+		{
+			"type": "shell",
+			"script": "ansible.sh"
+		},
+		{
+			"type": "ansible-local",
+			"playbook_file": "./playbook.yml"
+		},
+		{
+			"type": "file",
+			"source": "ToUpload/",
+			"destination": "/tmp"
+		},
+		{
+			"type": "shell",
+			"script": "Scripts/nginx.sh",
+			"environment_vars": [
+				"AUTH_HEADER={{user `auth_header`}}"
+			]
+		},
+		{
+			"type": "shell",
+			"inline": [
+				"echo '**** Configuring application'",
+				"sudo apt-get install -y supervisor={{user `supervisor_version`}}",
+				"sudo cp /tmp/app-supervisor.conf /etc/supervisor/conf.d",
+				"sudo cp /tmp/app /usr/local/bin/app",
+				"sudo supervisorctl reread",
+				"sudo supervisorctl update"
+			]
+		}
+	]
+}

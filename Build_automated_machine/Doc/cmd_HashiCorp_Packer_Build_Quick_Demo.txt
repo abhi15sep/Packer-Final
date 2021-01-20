@@ -1,0 +1,23 @@
+vi aws_ami_1.json
+
+
+{
+   "builders":[
+      {
+         "type":"amazon-ebs",
+         "access_key":"xxxxxxxyyyyyyzzzzzz",
+         "secret_key":"aaaaaa/vvvvvvvvvv/rrrrrrrrrrrrrrrrrrrrrrrr",
+         "region":"us-west-2",
+         "source_ami":"ami-0528a5175983e7f28",
+         "instance_type":"t2.micro",
+         "ssh_username":"ec2-user",
+         "ami_name":"packer-demo 1"
+      }
+   ]
+}
+
+
+packer validate aws_ami_1.json
+
+
+packer build aws_ami_1.json

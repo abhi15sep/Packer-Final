@@ -1,0 +1,24 @@
+null_builder.json
+
+
+{
+   "builders":[
+      {
+         "type":"null",
+         "communicator":"none"
+      }
+   ],
+   "provisioners":[
+      {
+         "type":"shell-local",
+         "inline":"echo this runs locally without any builder!"
+      }
+   ]
+}
+
+
+
+
+packer validate null_builder.json
+
+packer build null_builder.json

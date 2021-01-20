@@ -1,0 +1,47 @@
+function_ami_name_generate
+
+"ami_name": 
+
+
+function_ami_name_generate.json
+
+
+{
+   "variables":{
+      "aws_access_key":"xxxxxx",
+      "aws_secret_key":"yyyyyy"
+   },
+   "builders":[
+      {
+         "type":"amazon-ebs",
+         "access_key":"{{user `aws_access_key`}}",
+         "secret_key":"{{user `aws_secret_key`}}",
+         "region":"us-west-2",
+         "source_ami":"ami-0528a5175983e7f28",
+         "instance_type":"t2.micro",
+         "ssh_username":"ec2-user",
+         "ami_name":"packer-ami-functiontest-{{isotime | clean_resource_name }}"
+      }
+   ],
+   "provisioners":[
+      {
+         "type":"shell",
+         "inline":[
+            "echo Connected to the Instance with '{{build `User`}}@{{build `Host`}}:{{build `Port`}}'"
+         ]
+      },
+      {
+         "type":"shell-local",
+         "environment_vars":[
+            "MYLOC_VAR={{ build `PackerRunUUID`}}"
+         ],
+         "inline":[
+            "echo $MYLOC_VAR"
+         ]
+      }
+   ]
+}
+
+packer validate -var-file=variables.json function_ami_name_generate.json
+
+packer build -var-file=variables.json function_ami_name_generate.json

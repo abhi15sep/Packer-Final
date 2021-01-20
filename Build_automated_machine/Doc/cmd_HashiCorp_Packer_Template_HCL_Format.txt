@@ -1,0 +1,33 @@
+aws_ami.pkr.hcl
+
+variable "aws_access_key" {
+  type    = string
+  default = "xxxxxx"
+}
+
+variable "aws_secret_key" {
+  type    = string
+  default = "yyyyyy"
+}
+
+source "amazon-ebs" "hcl_sample" {
+  access_key    = "${var.aws_access_key}"
+  ami_name      = "packer-demo var 1"
+  instance_type = "t2.micro"
+  region        = "us-west-2"
+  secret_key    = "${var.aws_secret_key}"
+  source_ami    = "ami-0528a5175983e7f28"
+  ssh_username  = "ec2-user"
+}
+
+build {
+  sources = ["source.amazon-ebs.hcl_sample"]
+
+}
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~````
+packer validate aws_ami.pkr.hcl
+
+packer build -var-file=variables.json aws_ami.pkr.hcl

@@ -1,0 +1,60 @@
+aws_ami_with_variable.json
+
+{
+   "variables":{
+      "aws_access_key":"AKIATSBRNHEQTJN5JFUS",
+      "aws_secret_key":"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"
+   },
+   "builders":[
+      {
+         "type":"amazon-ebs",
+         "access_key":"{{user `aws_access_key`}}",
+         "secret_key":"{{user `aws_secret_key`}}",
+         "region":"us-west-2",
+         "source_ami":"ami-0528a5175983e7f28",
+         "instance_type":"t2.micro",
+         "ssh_username":"ec2-user",
+         "ami_name":"packer-demo var 1"
+      }
+   ]
+}
+
+
+packer validate aws_ami_with_variable.json
+
+packer build aws_ami_with_variable.json
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+export AWS_ACCESS=AKIATSBRNHEQTJN5JFUS
+export AWS_SECRET=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
+
+
+aws_ami_with_env_variable.json
+
+
+{
+   "variables":{
+      "aws_access_key":"{{env `AWS_ACCESS`}}",
+      "aws_secret_key":"{{env `AWS_SECRET`}}"
+   },
+   "builders":[
+      {
+         "type":"amazon-ebs",
+         "access_key":"{{user `aws_access_key`}}",
+         "secret_key":"{{user `aws_secret_key`}}",
+         "region":"us-west-2",
+         "source_ami":"ami-0528a5175983e7f28",
+         "instance_type":"t2.micro",
+         "ssh_username":"ec2-user",
+         "ami_name":"packer-demo var 1"
+      }
+   ]
+}
+
+packer validate aws_ami_with_env_variable.json
+
+packer build aws_ami_with_env_variable.json
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
