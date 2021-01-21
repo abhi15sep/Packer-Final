@@ -1,0 +1,62 @@
+aws_ansible_remote.json
+
+{
+   "variables":{
+      "aws_access_key":"xxxxxx",
+      "aws_secret_key":"yyyyyy"
+   },
+   "builders":[
+      {
+         "type":"amazon-ebs",
+         "access_key":"{{user `aws_access_key`}}",
+         "secret_key":"{{user `aws_secret_key`}}",
+         "region":"us-west-2",
+         "source_ami":"ami-0bc06212a56393ee1",
+         "instance_type":"t2.micro",
+         "ssh_username":"ec2-user",
+         "ami_name":"packer-demo ansible-remote"
+      }
+   ],
+   "provisioners":[
+      {
+         "type":"ansible",
+         "user": "ec2-user",
+         "playbook_file":"./playbook.yml"
+      }
+   ]
+}
+
+ansible-playbook --version
+
+~~~~~~~~~~~
+
+## Local installation
+
+
+sudo yum -y install epel-release
+sudo yum -y install ansible
+
+
+
+~~~~~~~~~~~~~~``
+playbook.yml
+
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Installing Latest version of Apache
+      yum: pkg=httpd state=latest
+    - name: (Enable it on System Boot)
+      service: name=httpd enabled=yes
+
+
+
+
+
+
+
+packer validate -var aws_access_key=AKIATSasdfasdfTJN5JFUS -var aws_secret_key=jHj+VT/sadfadsf/01tph+IKh1ETGSavE+q8CshZit aws_ansible_remote.json
+
+
+packer build -var aws_access_key=AKIATSasdfasdfasdfTJN5JFUS -var aws_secret_key=jHj+VT/asdfasdf/01tph+IKh1ETGSavE+q8CshZit aws_ansible_remote.json

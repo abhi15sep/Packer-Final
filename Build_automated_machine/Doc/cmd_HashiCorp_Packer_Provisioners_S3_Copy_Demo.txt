@@ -1,0 +1,5 @@
+packer validate -var-file=variables.json packer_provision_demo_http_copy_from_s3.json
+
+packer build -var-file=variables.json packer_provision_demo_http_copy_from_s3.json
+
+

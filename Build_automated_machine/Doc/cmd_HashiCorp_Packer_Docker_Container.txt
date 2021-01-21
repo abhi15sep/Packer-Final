@@ -1,0 +1,35 @@
+ docker_container.json
+ 
+ 
+ {
+    "builders":[
+       {
+          "type":"docker",
+          "image":"alpine:latest",
+          "export_path":"myalpine.tar"
+       }
+    ]
+ }
+ 
+ 
+ packer validate docker_container.json
+ 
+ 
+ packer build docker_container.json
+ 
+ 
+ 
+ cat myalpine.tar | docker import - mydockerimage:latest
+ 
+ docker images
+ 
+ docker run -d -it mydockerimage:latest /bin/sh
+ 
+ docker ps
+ 
+ docker exec -it 592f8403774e /bin/sh
+ 
+ docker container rm 592f8403774e
+ 
+ 
+docker image rm mydockerimage

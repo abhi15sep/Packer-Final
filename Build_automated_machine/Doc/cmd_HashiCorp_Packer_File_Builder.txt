@@ -1,0 +1,19 @@
+file_builder.json
+
+
+{
+   "builders":[
+      {
+         "type":"file",
+         "content":"This is a sample for file builder",
+         "target":"file_builder_target"
+      }
+   ]
+}
+
+
+
+packer validate file_builder.json
+
+
+packer build file_builder.json

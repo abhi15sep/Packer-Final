@@ -1,0 +1,45 @@
+multiple_builder.json
+
+{
+   "builders":[
+      {
+         "type":"amazon-ebs",
+         "name": "aws_linux",
+         "access_key":"{{user `aws_access_key`}}",
+         "secret_key":"{{user `aws_secret_key`}}",
+         "region":"us-west-2",
+         "source_ami":"ami-0528a5175983e7f28",
+         "instance_type":"t2.micro",
+         "ssh_username":"ec2-user",
+         "ami_name":"multiplebuild_aws_linux"
+      },
+      {
+         "type":"amazon-ebs",
+         "name": "centos",
+         "access_key":"{{user `aws_access_key`}}",
+         "secret_key":"{{user `aws_secret_key`}}",
+         "region":"us-west-2",
+         "source_ami":"ami-0bc06212a56393ee1",
+         "instance_type":"t2.micro",
+         "ssh_username":"centos",
+         "ami_name":"multiplebuild_aws_centos"
+      }
+   ],
+   "provisioners":[
+      {
+         "type":"shell",
+         "inline":[
+            "sleep 30",
+            "sudo yum update -y",
+            "sudo yum install httpd -y",
+            "sudo service httpd start",
+            "sudo chkconfig httpd on"
+         ]
+      }
+   ]
+}
+
+
+packer validate -var aws_access_key=AKIATSasdfasdfTJN5JFUS -var aws_secret_key=jHj+VT/asdfasdf/01tph+IKh1ETGSavE+q8CshZit multiple_builder.json
+
+packer build -var aws_access_key=AKIATSBRasdfasdfN5JFUS -var aws_secret_key=jHj+VT/asdfadsf/01tph+IKh1ETGSavE+q8CshZit multiple_builder.json
