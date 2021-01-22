@@ -1,0 +1,80 @@
+post_processor_artifice.json
+
+{
+   "builders":[
+      {
+         "type":"docker",
+         "name":"post_processor_test",
+         "image":"alpine:latest",
+         "export_path":"myalpine_latest.tar"
+      }
+   ],
+   "provisioners":[
+      {
+         "type":"file",
+         "source":"test.txt",
+         "destination":"/tmp/test.txt"
+      },
+      {
+         "type":"shell",
+         "inline":"ifconfig >> /tmp/test.txt"
+      },
+      {
+         "type":"file",
+         "source":"/tmp/test.txt",
+         "destination":"test_download.txt",
+         "direction":"download"
+      }
+   ],
+   "post-processors":[
+      [
+         {
+            "type":"artifice",
+            "files":[
+               "test_download.txt"
+            ]
+         },
+         {
+            "type":"compress",
+            "keep_input_artifact": true,
+            "output":"test_download.tar.gz"
+         },
+         {
+            "type":"checksum",
+            "checksum_types":[
+               "sha1",
+               "sha256"
+            ],
+            "output":"packer_{{.BuildName}}_{{.ChecksumType}}.checksum"
+         },
+         {
+            "type":"shell-local",
+            "inline":[
+               "du -sh test_download.tar.gz"
+            ]
+         }
+      ]
+   ]
+}
+
+cat test.txt
+
+packer validate post_processor_artifice.json
+
+packer build post_processor_artifice.json
+
+cat test_download.txt
+
+cat packer_*.checksum
+
+ls -la *.tar.gz
+
+
+
+
+
+
+
+  
+  
+  

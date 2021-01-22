@@ -1,0 +1,41 @@
+https://app.vagrantup.com/boxes/search
+
+vagrant_builder.json
+
+
+{
+   "builders":[
+      {
+         "type":"vagrant",
+         "source_path":"generic/alpine38",
+         "communicator":"ssh",
+         "add_force":true,
+         "provider":"virtualbox",
+         "output_dir":"vagrant/boxes"
+      }
+   ]
+}
+
+
+
+packer validate vagrant_builder.json
+
+packer build vagrant_builder.json
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vagrant box add ./vagrant/boxes/package.box --name Alpine38
+
+vagrant box list
+
+vagrant init -m Alpine38
+
+  
+vagrant up
+
+vagrant ssh
+
+
+

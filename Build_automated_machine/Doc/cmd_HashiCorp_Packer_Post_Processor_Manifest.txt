@@ -1,0 +1,37 @@
+ post_processor_manifest.json
+ 
+ 
+ {
+    "builders":[
+       {
+          "type":"docker",
+          "name":"alpinelatest",
+          "image":"alpine:latest",
+          "export_path":"myalpine_latest.tar"
+       },
+       {
+          "type":"docker",
+          "name":"nginxlatest",
+          "image":"nginx:latest",
+          "export_path":"nginx_latest.tar"
+       }
+    ],
+    "post-processors":[
+       {
+          "type":"manifest",
+          "output":"manifest.json",
+          "strip_path":true,
+          "custom_data":{
+             "my_custom_data":"example"
+          }
+       }
+    ]
+ }
+ 
+ 
+ 
+ packer validate post_processor_manifest.json
+ 
+ packer build post_processor_manifest.json
+ 
+cat manifest.json

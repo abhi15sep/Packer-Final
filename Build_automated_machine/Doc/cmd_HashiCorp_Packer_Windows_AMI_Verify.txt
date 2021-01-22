@@ -1,0 +1,11 @@
+packer validate -var-file=variables.json windows_ami.json
+
+packer build -var-file=variables.json windows_ami.json
+
+
+
+
+
+PACKER_LOG=1 packer build -var-file variables.json windows_ami.json
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
